@@ -9,8 +9,8 @@ duty_cycle_controller:
   # Set the initial duty cycle percentage
   duty_cycle_percentage: 50
   # Minimum on/off time
-  min_pulse_width: "15 minutes"
+  min_pulse_width: "30 minutes"
   # The duration for duty cycle analysis
-  history_duration: "1 hour"
+  history_duration: "6 hours"
   # The time between duty cycle checks
-  adjustment_interval: "5 minutes"
+  adjustment_interval: "15 minutes"
