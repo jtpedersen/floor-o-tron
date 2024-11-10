@@ -3,8 +3,9 @@
 duty_cycle_controller:
   module: duty_cycle_controller
   class: DutyCycleController
+  log_level: DEBUG
   # your actual switch entity ID or list of IDs
-  heater_switch: switch.your_heating_switch
+  heater_switch: "input_boolean.fakeheater"
   # Set the initial duty cycle percentage
   duty_cycle_percentage: 50
   # Minimum on/off time
