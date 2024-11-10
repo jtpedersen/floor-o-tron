@@ -2,6 +2,8 @@
 source "$(cd "$(dirname "$0")" && pwd)/env.sh"
 echo "Running JSON validation using Python's json.tool..."
 
+set -e
+
 find . -name "*.json" | while read -r file; do
     echo "JSON validating: $file"
     $FLOOROTRON_PYTHON -m json.tool "$file" > /dev/null

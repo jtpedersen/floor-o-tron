@@ -2,6 +2,8 @@
 source "$(cd "$(dirname "$0")" && pwd)/env.sh"
 echo "Running yamllint for YAML validation..."
 
+set -e
+
 $FLOOROTRON_PYTHON -m yamllint .
 
 if [ $? -ne 0 ]; then

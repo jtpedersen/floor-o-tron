@@ -3,6 +3,8 @@
 # Source the environment variables
 source "$(dirname "$0")/env.sh"
 
+set -e
+
 # Check if the --fix parameter is provided
 if [ "$1" == "--fix" ]; then
     echo "Running Black to format Python files (fix mode)..."
