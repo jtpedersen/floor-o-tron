@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy AppDaemon configuration and your app code
 COPY apps/ /conf/apps/
-COPY appdaemon.yaml /conf/appdaemon.yaml
+#COPY appdaemon.yaml /conf/appdaemon.yaml
 COPY apps.yaml /conf/apps.yaml
 
 # Run AppDaemon when the container starts

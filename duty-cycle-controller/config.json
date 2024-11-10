@@ -23,5 +23,7 @@
 	"history_duration": "int",
 	"adjustment_interval": "int"
     },
-    "image": "jtpedersen/duty-cycle-controller"
+    "build_from": {
+	"amd64": "local/duty-cycle-controller:0.0.1"
+    }
 }
