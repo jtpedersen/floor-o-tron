@@ -67,6 +67,11 @@ def update_version_in_files(directory, new_version):
     content = re.sub(
         r'"version":\s*"\d+\.\d+\.\d+"', f'"version": "{new_version}"', content
     )
+
+    content = re.sub(
+        r'local/duty-cycle-controller:\d+\.\d+\.\d+', f'"version": "{new_version}"', content
+    )
+
     with open(config_path, "w") as f:
         f.write(content)
 
