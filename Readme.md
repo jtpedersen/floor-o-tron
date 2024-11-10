@@ -31,3 +31,34 @@ Floor-o-tron is an AppDaemon-based add-on that intelligently manages the duty cy
 
 
 "I’m afraid I can’t let you heat that, Dave." — Floor-o-Tron
+
+## Development Guidelines
+
+To maintain code quality, we use the following tools for linting and formatting:
+
+- **Black**: Python code formatter.
+- **yamllint**: YAML file linter.
+- **json.tool**: Python's built-in module for JSON validation.
+
+
+## Setting Up Linters in a Virtual Environment
+
+To ensure that the development environment is isolated, we use a virtual environment for our linters.
+
+### Initial Setup
+
+Run the following script to create the virtual environment, install the required linters, and set up environment variables:
+
+```bash
+./scripts/install_linters.sh
+
+### Using linters
+
+- Run manually or setup git hooks
+   ```bash
+   find scripts -name run_*.sh -exec {} \;
+- Or use gits pre-commit hooks. Run the following command to set up the Git hooks:
+  ```bash
+  ./scripts/setup_git_hooks.sh
+
+
