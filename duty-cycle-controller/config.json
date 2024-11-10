@@ -23,6 +23,5 @@
 	"history_duration": "int",
 	"adjustment_interval": "int"
     },
-    "image": "jtpedersen/duty-cycle-controller",
-    "privileged": false
+    "image": "jtpedersen/duty-cycle-controller"
 }
