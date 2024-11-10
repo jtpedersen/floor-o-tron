@@ -3,27 +3,61 @@
     "version": "0.0.3",
     "slug": "duty_cycle_controller",
     "description": "Manage underfloor heating using duty cycle logic.",
-    "url" : "https://github.com/jtpedersen/floor-o-tron/tree/main/duty-cycle-controller",
+    "url": "https://github.com/jtpedersen/floor-o-tron/tree/main/duty-cycle-controller",
     "arch": ["armv7", "aarch64", "amd64", "i386"],
     "startup": "application",
     "boot": "auto",
     "ports": {
-	"5050/tcp": 5050
+        "5050/tcp": 5050
     },
     "map": ["config", "ssl", "share", "addons"],
     "options": {
-	"duty_cycle_percentage": 50,
-	"min_pulse_width": 900,
-	"history_duration": 3600,
-	"adjustment_interval": 900
+        "heater_switch": "switch.your_heating_switch",
+        "duty_cycle_percentage": 50,
+        "min_pulse_width": "15 minutes",
+        "history_duration": "1 hour",
+        "adjustment_interval": "5 minutes"
     },
     "schema": {
-	"duty_cycle_percentage": "int",
-	"min_pulse_width": "int",
-	"history_duration": "int",
-	"adjustment_interval": "int"
+        "heater_switch": {
+            "oneOf": [
+                {
+                    "type": "string",
+                    "description": "A single switch entity ID."
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "description": "A list of switch entity IDs."
+                    }
+                }
+            ]
+        },
+        "duty_cycle_percentage": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "default": 50,
+            "description": "The target duty cycle percentage (0-100)."
+        },
+        "min_pulse_width": {
+            "type": "string",
+            "default": "15 minutes",
+            "description": "The minimum on/off time in a human-readable format."
+        },
+        "history_duration": {
+            "type": "string",
+            "default": "1 hour",
+            "description": "The duration for duty cycle analysis in a human-readable format."
+        },
+        "adjustment_interval": {
+            "type": "string",
+            "default": "5 minutes",
+            "description": "The time between duty cycle checks in a human-readable format."
+        }
     },
     "build_from": {
-	"amd64": "local/duty-cycle-controller:0.0.1"
+        "amd64": "local/duty-cycle-controller:0.0.3"
     }
 }
