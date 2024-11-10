@@ -69,7 +69,9 @@ def update_version_in_files(directory, new_version):
     )
 
     content = re.sub(
-        r'local/duty-cycle-controller:\d+\.\d+\.\d+', f'"version": "{new_version}"', content
+        r"local/duty-cycle-controller:\d+\.\d+\.\d+",
+        f"local/duty-cycle-controller:{new_version}",
+        content,
     )
 
     with open(config_path, "w") as f:
@@ -108,7 +110,7 @@ def update_changelog(directory, new_version, release_notes):
         f.write(new_entry + changelog_content)
 
 
-def commit_and_tag_repo(directory, new_version):
+def commit_and_tag_repo(directory, new_version, release_notes):
     logger.info("Committing changes and tagging the new version...")
     try:
         subprocess.run(
@@ -122,9 +124,16 @@ def commit_and_tag_repo(directory, new_version):
             check=True,
         )
         subprocess.run(
-            ["git", "commit", "-m", f"Bump version to {new_version}"], check=True
+            [
+                "git",
+                "commit",
+                "-m",
+                f"Bump {directory} version to {new_version}\n\n{release_notes}",
+            ],
+            check=True,
         )
-        subprocess.run(["git", "tag", f"v{new_version}"], check=True)
+        tag = f"v{new_version}"
+        subprocess.run(["git", "tag", tag], check=True)
         logger.info(f"Version {new_version} tagged successfully.")
     except subprocess.CalledProcessError as e:
         logger.error(f"Git command failed: {e}")
@@ -158,7 +167,7 @@ def main():
     update_changelog(directory, new_version, release_notes)
 
     # Commit and tag the new version in Git
-    commit_and_tag_repo(directory, new_version)
+    commit_and_tag_repo(directory, new_version, release_notes)
 
     logger.info(f"Version bumped to {new_version} with changelog updated.")
 
