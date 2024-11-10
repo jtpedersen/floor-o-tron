@@ -14,7 +14,7 @@
     "map": ["config", "ssl", "share", "addons"],
     "options": {
 	"ha_token" : "",
-	"ha_url" : "http://homeassistant.local:8123"
+	"ha_url" : "http://homeassistant.local:8123",
 	"duty_cycle_percentage": 50,
 	"min_pulse_width": "15 minutes",
 	"history_duration": "1 hour",
