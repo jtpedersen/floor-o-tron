@@ -12,49 +12,17 @@
     },
     "map": ["config", "ssl", "share", "addons"],
     "options": {
-        "heater_switch": "switch.your_heating_switch",
-        "duty_cycle_percentage": 50,
-        "min_pulse_width": "15m",
-        "history_duration": "1h",
-        "adjustment_interval": "5m"
+	"duty_cycle_percentage": 50,
+	"min_pulse_width": "15 minutes",
+	"history_duration": "1 hour",
+	"adjustment_interval": "7 minutes"
     },
     "schema": {
-        "heater_switch": {
-            "oneOf": [
-                {
-                    "type": "str",
-                    "description": "A single switch entity ID."
-                },
-                {
-                    "type": "list",
-                    "items": "str",
-                    "description": "A list of switch entity IDs."
-                }
-            ]
-        },
-        "duty_cycle_percentage": {
-            "type": "int",
-            "minimum": 0,
-            "maximum": 100,
-            "default": 50,
-            "description": "The target duty cycle percentage (0-100)."
-        },
-        "min_pulse_width": {
-            "type": "str",
-            "default": "15m",
-            "description": "The minimum on/off time (e.g., '15m' for 15 minutes)."
-        },
-        "history_duration": {
-            "type": "str",
-            "default": "1h",
-            "description": "The duration for duty cycle analysis (e.g., '1h' for 1 hour)."
-        },
-        "adjustment_interval": {
-            "type": "str",
-            "default": "5m",
-            "description": "The time between duty cycle checks (e.g., '5m' for 5 minutes)."
-        }
-    },    "build_from": {
+	"duty_cycle_percentage": "int",
+	"min_pulse_width": "str",
+	"history_duration": "str",
+	"adjustment_interval": "str"
+    },     "build_from": {
         "amd64": "local/duty-cycle-controller:0.0.4"
     }
 }
