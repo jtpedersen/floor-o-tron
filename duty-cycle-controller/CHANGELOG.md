@@ -1,3 +1,7 @@
+## [0.0.4] - Better config, better bumping, better hooks
+### Changes
+- Better config, better bumping, better hooks
+
 ## [0.0.3] - Updating developer setup and configuration
 ### Changes
 - Updating developer setup and configuration
