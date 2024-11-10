@@ -5,7 +5,7 @@
     "description": "Manage underfloor heating using duty cycle logic.",
     "url": "https://github.com/jtpedersen/floor-o-tron/tree/main/duty-cycle-controller",
     "arch": ["armv7", "aarch64", "amd64", "i386"],
-    "startup": "applicaton",
+    "startup": "application",
     "ports": {
         "5050/tcp": 5050
     },
