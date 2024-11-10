@@ -1,0 +1,27 @@
+{
+  "name": "Duty Cycle Controller",
+  "version": "1.0.0",
+  "slug": "duty_cycle_controller",
+  "description": "Manage underfloor heating using duty cycle logic.",
+  "arch": ["armv7", "aarch64", "amd64", "i386"],
+  "startup": "application",
+  "boot": "auto",
+  "ports": {
+    "5050/tcp": 5050
+  },
+  "map": ["config", "ssl", "share", "addons"],
+  "options": {
+    "duty_cycle_percentage": 50,
+    "min_pulse_width": 900,
+    "history_duration": 3600,
+    "adjustment_interval": 900
+  },
+  "schema": {
+    "duty_cycle_percentage": "int",
+    "min_pulse_width": "int",
+    "history_duration": "int",
+    "adjustment_interval": "int"
+  },
+  "image": "yourusername/duty-cycle-controller",
+  "privileged": false
+}
