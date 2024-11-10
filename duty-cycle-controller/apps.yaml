@@ -3,6 +3,6 @@ duty_cycle_controller:
   class: DutyCycleController
   switch_entity: switch.your_heating_switch  # Replace with your actual switch entity ID
   duty_cycle_percentage: 50  # Set the initial duty cycle percentage
-  min_pulse_width: 900  # Minimum on/off time in seconds (e.g., 15 minutes)
-  history_duration: 3600  # The duration for duty cycle analysis (default 1 hour)
-  adjustment_interval: 900  # The time between duty cycle checks (e.g., 15 minutes)
+  min_pulse_width: "15 minutes"  # Minimum on/off time
+  history_duration: "1 hour"  # The duration for duty cycle analysis
+  adjustment_interval: "5 minutes"  # The time between duty cycle checks 

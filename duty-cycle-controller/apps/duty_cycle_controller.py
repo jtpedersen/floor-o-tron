@@ -1,14 +1,50 @@
 import appdaemon.plugins.hass.hassapi as hass
 from datetime import datetime, timedelta
+import re
+from datetime import timedelta
+
+def parse_time_literal(time_str):
+    """Parses a time string like '1H', '1_hour', '15 minutes' into a timedelta object."""
+    time_units = {
+        's': 'seconds',
+        'sec': 'seconds',
+        'second': 'seconds',
+        'seconds': 'seconds',
+        'm': 'minutes',
+        'min': 'minutes',
+        'minute': 'minutes',
+        'minutes': 'minutes',
+        'h': 'hours',
+        'hour': 'hours',
+        'hours': 'hours',
+        'd': 'days',
+        'day': 'days',
+        'days': 'days'
+    }
+
+    # Regex to match various time formats like '1H', '1_hour', '15 minutes'
+    match = re.match(r'(\d+)\s*([a-zA-Z_]+)', time_str)
+    if not match:
+        raise ValueError(f"Invalid time format: {time_str}")
+
+    value, unit = match.groups()
+    unit = unit.lower().replace('_', '')
+
+    if unit not in time_units:
+        raise ValueError(f"Unsupported time unit: {unit}")
+
+    # Create a timedelta object with the appropriate keyword argument
+    return timedelta(**{time_units[unit]: int(value)})
+
 
 class DutyCycleController(hass.Hass):
     def initialize(self):
         # Configuration parameters
         self.switch_entity = "switch.your_heating_switch"  # Replace with your actual switch entity ID
-        self.duty_cycle_percentage = 0.5  # Initial duty cycle (50%)
-        self.min_pulse_width = 15 * 60  # Minimum on/off time in seconds (default 15 minutes)
-        self.history_duration = 3600  # History duration for measurement (default 1 hour)
-        self.adjustment_interval = 900  # Time between duty cycle checks (e.g., 15 minutes)
+        self.duty_cycle_percentage = 0.5  
+        self.min_pulse_width = parse_time_literal(self.args.get("min_pulse_width", "15 minutes"))
+        self.duration = parse_time_literal(self.args.get("duration", "1 hour"))
+        self.cycle_time = parse_time_literal(self.args.get("cycle_time", "1 day"))
 
         # Track on/off history
         self.history = []
