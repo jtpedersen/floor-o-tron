@@ -5,13 +5,16 @@
     "description": "Manage underfloor heating using duty cycle logic.",
     "url": "https://github.com/jtpedersen/floor-o-tron/tree/main/duty-cycle-controller",
     "arch": ["armv7", "aarch64", "amd64", "i386"],
-    "startup": "application",
-    "boot": "auto",
+    "startup": "services",
+    "init": false,
+    "services": ["appdaemon"],
     "ports": {
         "5050/tcp": 5050
     },
     "map": ["config", "ssl", "share", "addons"],
     "options": {
+	"ha_token" : "",
+	"ha_url" : "http://homeassistant.local:8123"
 	"duty_cycle_percentage": 50,
 	"min_pulse_width": "15 minutes",
 	"history_duration": "1 hour",

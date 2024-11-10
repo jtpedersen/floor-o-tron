@@ -1,0 +1,22 @@
+---
+
+appdaemon:
+  time_zone: Europe/Berlin
+  plugins:
+    HASS:
+      type: hass
+      ha_url: !env_var HA_URL
+      token: !env_var HA_TOKEN
+
+http:
+  # Port AppDaemon listens on for web access (e.g., dashboards)
+  url: http://0.0.0.0:5050
+
+admin:
+  title: AppDaemon
+  password: YOUR_PASSWORD
+
+apps:
+  # This section is used for global app configuration
+  # Configuration specific to apps will be loaded from apps.yaml
+  disable_apps: false
