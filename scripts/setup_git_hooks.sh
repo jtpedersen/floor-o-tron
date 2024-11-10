@@ -13,7 +13,7 @@ echo "echo 'Running all pre-commit hooks...'" >> "$HOOK_FILE"
 
 # Find and add all pre-commit-* scripts in the scripts directory to the main pre-commit script
 find "$SCRIPT_DIR" -type f -name 'pre-commit-*' | while read -r script; do
-    echo "source \"$script\"" >> "$HOOK_FILE"
+    echo "source \"$script\" || { echo \"Hook $script failed. Aborting commit.\"; exit 1; }" >> "$HOOK_FILE"
     echo "echo 'Completed $script'" >> "$HOOK_FILE"
 done
 
