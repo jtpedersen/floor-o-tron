@@ -1,3 +1,7 @@
+## [0.0.6] - network setup
+### Changes
+- network setup
+
 ## [0.0.5] - will it run?
 ### Changes
 - will it run?
