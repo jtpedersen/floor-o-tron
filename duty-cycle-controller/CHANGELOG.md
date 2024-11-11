@@ -1,3 +1,7 @@
+## [0.0.10] - better local setup
+### Changes
+- better local setup
+
 ## [0.0.9] - better local setup  and stop using bumpng for testing
 ### Changes
 - better local setup  and stop using bumpng for testing
