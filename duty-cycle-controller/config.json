@@ -1,39 +1,50 @@
 {
-    "name": "Duty Cycle Controller",
-    "version": "0.0.6",
-    "slug": "duty_cycle_controller",
-    "description": "Manage underfloor heating using duty cycle logic.",
-    "url": "https://github.com/jtpedersen/floor-o-tron/tree/main/duty-cycle-controller",
-    "arch": ["armv7", "aarch64", "amd64", "i386"],
-    "startup": "application",
-    "hassio_api": true,
-    "auth_api": true,
-    "host_network": true,
-    "ports": {
-        "5050/tcp": 5050
-    },
-    "map": ["config", "ssl", "share", "addons"],
-    "options": {
-	"ha_token" : "",
-	"ha_url" : "http://localhost:8123",
-	"heater_switch" : "input_boolean.fakeheater",
-	"duty_cycle_percentage": 50,
-	"min_pulse_width": "15 minutes",
-	"history_duration": "1 hour",
-	"adjustment_interval": "7 minutes",
-	"debug": false
-    },
-    "schema": {
-	"ha_token" : "str",
-	"ha_url" : "str",
-	"heater_switch" : "str",
-	"duty_cycle_percentage": "int",
-	"min_pulse_width": "str",
-	"history_duration": "str",
-	"adjustment_interval": "str",
-	"debug": "bool"
-    },
-    "build_from": {
-        "amd64": "local/duty-cycle-controller:0.0.6"
-    }
+  "name": "Duty Cycle Controller",
+  "version": "0.0.6",
+  "slug": "duty_cycle_controller",
+  "description": "Manage underfloor heating using duty cycle logic.",
+  "url": "https://github.com/jtpedersen/floor-o-tron/tree/main/duty-cycle-controller",
+  "arch": [
+    "armv7",
+    "aarch64",
+    "amd64",
+    "i386"
+  ],
+  "startup": "application",
+  "hassio_api": true,
+  "auth_api": true,
+  "host_network": true,
+  "homeassistant_api": true,
+  "ports": {
+    "5050/tcp": 5050
+  },
+  "map": [
+    "config",
+    "ssl",
+    "share",
+    "addons"
+  ],
+  "options": {
+    "ha_token": "",
+    "ha_url": "http://localhost:8123",
+    "heater_switch": "input_boolean.fakeheater",
+    "duty_cycle_percentage": 50,
+    "min_pulse_width": "15 minutes",
+    "history_duration": "1 hour",
+    "adjustment_interval": "7 minutes",
+    "debug": false
+  },
+  "schema": {
+    "ha_token": "str",
+    "ha_url": "str",
+    "heater_switch": "str",
+    "duty_cycle_percentage": "int",
+    "min_pulse_width": "str",
+    "history_duration": "str",
+    "adjustment_interval": "str",
+    "debug": "bool"
+  },
+  "build_from": {
+    "amd64": "local/duty-cycle-controller:0.0.6"
+  }
 }
