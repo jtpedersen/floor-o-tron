@@ -12,9 +12,6 @@ COPY run.py /run.py
 RUN chmod -R 755 /conf
 RUN mkdir -p /data
 
-ENV HA_TOKEN="${HA_TOKEN}"
-ENV HA_URL="${HA_URL}"
-
 ENTRYPOINT []
 
 CMD ["python", "/run.py"]

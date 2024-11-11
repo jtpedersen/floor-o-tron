@@ -8,8 +8,8 @@ appdaemon:
   plugins:
     HASS:
       type: hass
-      ha_url: !env_var HA_URL
-      token: !env_var HA_TOKEN
+      ha_url: !env_var ha_url
+      token: !env_var ha_token
 
 # http:
 #   # Port AppDaemon listens on for web access (e.g., dashboards)

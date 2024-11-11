@@ -1,3 +1,4 @@
 {
-    "debug": true
+  "debug": true,
+  "ha_url": "http://192.168.1.215:8123"
 }
