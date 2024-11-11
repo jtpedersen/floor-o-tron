@@ -6,8 +6,8 @@ WORKDIR /conf
 
 COPY appdaemon.yaml /conf/appdaemon.yaml
 
-# Copy the apps directory and configuration
 COPY apps/ /conf/apps/
+COPY run.sh /run.sh
 
 # Ensure permissions are set
 RUN chmod -R 755 /conf
@@ -17,4 +17,4 @@ ENV HA_URL="${HA_URL}"
 
 ENTRYPOINT []
 
-CMD ["bash", "/apps/run.sh"]
+CMD ["bash", "/run.sh"]
