@@ -1,3 +1,7 @@
+## [0.0.9] - better local setup  and stop using bumpng for testing
+### Changes
+- better local setup  and stop using bumpng for testing
+
 ## [0.0.8] - run and stop using bumpng for testing
 ### Changes
 - run and stop using bumpng for testing
