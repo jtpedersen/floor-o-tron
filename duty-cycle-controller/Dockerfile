@@ -17,4 +17,4 @@ ENV HA_URL="${HA_URL}"
 
 ENTRYPOINT []
 
-CMD ["appdaemon", "-c", "/conf"]
+CMD ["bash", "/apps/run.sh"]

@@ -20,7 +20,8 @@
 	"duty_cycle_percentage": 50,
 	"min_pulse_width": "15 minutes",
 	"history_duration": "1 hour",
-	"adjustment_interval": "7 minutes"
+	"adjustment_interval": "7 minutes",
+	"debug": false
     },
     "schema": {
 	"ha_token" : "str",
@@ -29,7 +30,8 @@
 	"duty_cycle_percentage": "int",
 	"min_pulse_width": "str",
 	"history_duration": "str",
-	"adjustment_interval": "str"
+	"adjustment_interval": "str",
+	"debug": "bool"
     },
     "build_from": {
         "amd64": "local/duty-cycle-controller:0.0.6"
