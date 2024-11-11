@@ -1,3 +1,7 @@
+## [0.0.8] - run and stop using bumpng for testing
+### Changes
+- run and stop using bumpng for testing
+
 ## [0.0.7] - will it run?
 ### Changes
 - will it run?
