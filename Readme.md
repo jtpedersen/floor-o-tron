@@ -57,6 +57,7 @@ Run the following script to create the virtual environment, install the required
 - Run manually or setup git hooks
    ```bash
    find scripts -name run_*.sh -exec {} \;
+
 - Or use gits pre-commit hooks. Run the following command to set up the Git hooks:
   ```bash
   ./scripts/setup_git_hooks.sh
