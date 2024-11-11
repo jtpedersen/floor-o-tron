@@ -9,7 +9,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 set -e
 set -x
 
-$FLOOROTRON_PYTHON -m unittest discover -s $REPO_ROOT -p "test_*.py"
+$FLOOROTRON_PYTHON -m unittest discover -s $REPO_ROOT/duty-cycle-controller -p "test_*.py"
 
 # Check the exit status and handle errors
 if [ $? -ne 0 ]; then

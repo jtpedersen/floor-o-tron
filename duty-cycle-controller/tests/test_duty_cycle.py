@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime, timedelta
-from duty_cycle_controller import calculate_duty_cycle_from_history
+from apps.utils import calculate_duty_cycle_from_history
 
 
 # Helper function to create timestamps relative to a fixed "now"
