@@ -6,14 +6,16 @@
     "url": "https://github.com/jtpedersen/floor-o-tron/tree/main/duty-cycle-controller",
     "arch": ["armv7", "aarch64", "amd64", "i386"],
     "startup": "application",
+    "hassio_api": true,
+    "auth_api": true,
+    "host_network": true,
     "ports": {
         "5050/tcp": 5050
     },
-    "host_network" : true,
     "map": ["config", "ssl", "share", "addons"],
     "options": {
 	"ha_token" : "",
-	"ha_url" : "http://homeassistant.local:8123",
+	"ha_url" : "http://localhost:8123",
 	"heater_switch" : "input_boolean.fakeheater",
 	"duty_cycle_percentage": 50,
 	"min_pulse_width": "15 minutes",
