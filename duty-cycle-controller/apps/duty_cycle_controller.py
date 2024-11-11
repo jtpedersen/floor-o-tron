@@ -66,24 +66,45 @@ class DutyCycleController(hass.Hass):
             interval=self.adjustment_interval.total_seconds(),
         )
 
-    def calc_duty_cycle(self):
-        """Calculate the current duty cycle based on the history."""
-        now = datetime.now()
+    def calculate_duty_cycle_from_history(history, duration, now=None):
+        """
+        Calculates the duty cycle for a given history data set.
 
-        # Clean history older than history_duration to manage memory usage
-        self.history = [
-            entry
-            for entry in self.history
-            if entry["timestamp"] > now - self.history_duration
-        ]
+        Parameters:
+        - history: List of state entries, each entry containing 'state' and 'last_changed'.
+        - duration: The total duration to analyze as a timedelta object.
+        - now: Optional fixed "now" time for consistent testing.
 
-        on_time = sum(
-            (entry["duration"] for entry in self.history if entry["state"] == "on"),
-            timedelta(0),
-        )
-        total_time = self.history_duration
+        Returns:
+        - duty cycle as a float between 0 and 1.
+        """
+        if not history:
+            return 0.0
 
-        return on_time / total_time if total_time > timedelta(0) else 0
+        now = now or datetime.now()
+        on_time = 0
+        total_time = duration.total_seconds()
+
+        last_state = None
+        last_timestamp = None
+
+        for entry in history:
+            state = entry["state"]
+            timestamp = datetime.fromisoformat(entry["last_changed"])
+
+            if last_state == "on" and last_timestamp:
+                on_time += (timestamp - last_timestamp).total_seconds()
+
+            last_state = state
+            last_timestamp = timestamp
+
+        # If the last recorded state was "on", count time until now
+        if last_state == "on" and last_timestamp:
+            on_time += (datetime.now() - last_timestamp).total_seconds()
+
+        # Calculate duty cycle
+        duty_cycle = on_time / total_time if total_time > 0 else 0
+        return duty_cycle
 
     def set_heater_state(self, switch, state):
         current_state = switch.get_state()

@@ -17,6 +17,8 @@ find "$SCRIPT_DIR" -type f -name 'pre-commit-*' | while read -r script; do
     echo "echo 'Completed $script'" >> "$HOOK_FILE"
 done
 
+echo "$SCRIPT_DIR/run_unittests.sh" >> "$HOOK_FILE"
+
 # Make sure the .git/hooks/pre-commit script is executable
 chmod a+x "$HOOK_FILE"
 echo "Created and set permissions for .git/hooks/pre-commit"
