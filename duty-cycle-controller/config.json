@@ -9,6 +9,7 @@
     "ports": {
         "5050/tcp": 5050
     },
+    "network" : "host",
     "map": ["config", "ssl", "share", "addons"],
     "options": {
 	"ha_token" : "",
