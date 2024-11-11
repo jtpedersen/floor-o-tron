@@ -7,14 +7,14 @@ WORKDIR /conf
 COPY appdaemon.yaml /conf/appdaemon.yaml
 
 COPY apps/ /conf/apps/
-COPY run.sh /run.sh
+COPY run.py /run.py
 
-# Ensure permissions are set
 RUN chmod -R 755 /conf
+RUN mkdir -p /data
 
 ENV HA_TOKEN="${HA_TOKEN}"
 ENV HA_URL="${HA_URL}"
 
 ENTRYPOINT []
 
-CMD ["bash", "/run.sh"]
+CMD ["python", "/run.py"]
