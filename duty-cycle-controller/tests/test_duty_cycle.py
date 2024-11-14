@@ -1,21 +1,34 @@
 import unittest
 from datetime import datetime, timedelta
-from apps.utils import calculate_duty_cycle_from_history
+from apps.utils import (
+    calculate_duty_cycle_from_history,
+    parse_iso_to_datetime,
+    get_state,
+)
 
 
-# Helper function to create timestamps relative to a fixed "now"
-def make_timestamp(now, offset):
+def show_history(history, interval=1):
     """
-    Creates a timestamp with a given offset from a fixed base "now".
+    Displays the state history in ASCII art format between a specified time range.
 
-    Parameters:
-    - now: The base time.
-    - offset: A timedelta object representing the offset.
-
-    Returns:
-    - ISO format timestamp string.
+    :param history: List of dictionaries with 'state' and 'last_changed' as ISO strings.
+    :param begin: The start time as an int (minutes) or datetime.
+    :param end: The end time as an int (minutes) or datetime.
+    :param interval: The interval in minutes for each segment (default is 15 minutes).
     """
-    return (now - offset).isoformat()
+
+    current_time = parse_iso_to_datetime(history[0]["last_changed"])
+    end = parse_iso_to_datetime(history[-1]["last_changed"])
+    states = []
+
+    while current_time <= end:
+        state = get_state(history, current_time)
+        states.append("*" if state == "on" else " ")
+        current_time += timedelta(minutes=interval)
+
+    # Print the ASCII representation
+    print("State history:")
+    print("[" + "".join(states) + "]")
 
 
 class TestDutyCycleCalculation(unittest.TestCase):
@@ -24,10 +37,25 @@ class TestDutyCycleCalculation(unittest.TestCase):
         self.now = datetime(2023, 10, 1, 12, 0, 0)
         self.duration = timedelta(hours=1)  # 1-hour duration for analysis
 
+    def TS(self, offset=0):
+        """
+        Creates a timestamp with a given offset from a fixed base "now".
+
+        Parameters:
+        - now: The base time.
+        - offset: A timedelta object representing the offset.
+
+        Returns:
+        - ISO format timestamp string.
+        """
+        if not isinstance(offset, timedelta):
+            offset = timedelta(minutes=offset)
+        return (self.now - offset).isoformat()
+
     def test_empty_history(self):
         """Test when the history is empty, the duty cycle should be 0."""
         history = []
-        result = calculate_duty_cycle_from_history(history, self.duration, now=self.now)
+        result = calculate_duty_cycle_from_history(history, self.TS())
         self.assertEqual(result, 0.0)
 
     def test_full_on_period(self):
@@ -35,11 +63,11 @@ class TestDutyCycleCalculation(unittest.TestCase):
         history = [
             {
                 "state": "on",
-                "last_changed": make_timestamp(self.now, timedelta(hours=1)),
+                "last_changed": self.TS(timedelta(hours=1)),
             },
-            {"state": "on", "last_changed": make_timestamp(self.now, timedelta(0))},
+            {"state": "on", "last_changed": self.TS(timedelta(0))},
         ]
-        result = calculate_duty_cycle_from_history(history, self.duration, now=self.now)
+        result = calculate_duty_cycle_from_history(history, self.TS())
         self.assertAlmostEqual(result, 1.0, places=2)
 
     def test_half_on_half_off(self):
@@ -47,32 +75,32 @@ class TestDutyCycleCalculation(unittest.TestCase):
         history = [
             {
                 "state": "on",
-                "last_changed": make_timestamp(self.now, timedelta(minutes=60)),
+                "last_changed": self.TS(timedelta(minutes=60)),
             },
             {
                 "state": "off",
-                "last_changed": make_timestamp(self.now, timedelta(minutes=30)),
+                "last_changed": self.TS(timedelta(minutes=30)),
             },
             {
                 "state": "on",
-                "last_changed": make_timestamp(self.now, timedelta(minutes=15)),
+                "last_changed": self.TS(timedelta(minutes=15)),
             },
-            {"state": "off", "last_changed": make_timestamp(self.now, timedelta(0))},
+            {"state": "off", "last_changed": self.TS(timedelta(0))},
         ]
-        result = calculate_duty_cycle_from_history(history, self.duration, now=self.now)
-        self.assertAlmostEqual(result, 0.5, places=2)
+        result = calculate_duty_cycle_from_history(history, self.TS())
+        self.assertAlmostEqual(result, 0.75, places=2)
 
     def test_partial_on_period(self):
         """Test when the history shows 'on' for part of the period and 'off' for the rest."""
         history = [
             {
                 "state": "on",
-                "last_changed": make_timestamp(self.now, timedelta(minutes=45)),
+                "last_changed": self.TS(timedelta(minutes=45)),
             },
-            {"state": "off", "last_changed": make_timestamp(self.now, timedelta(0))},
+            {"state": "off", "last_changed": self.TS(timedelta(0))},
         ]
-        result = calculate_duty_cycle_from_history(history, self.duration, now=self.now)
-        self.assertAlmostEqual(result, 0.75, places=2)
+        result = calculate_duty_cycle_from_history(history, self.TS())
+        self.assertAlmostEqual(result, 1.0, places=2)
 
 
 if __name__ == "__main__":

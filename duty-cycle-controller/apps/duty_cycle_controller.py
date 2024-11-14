@@ -104,7 +104,7 @@ class DutyCycleController(hass.Hass):
 
     def duty_cycle_check(self, kwargs):
         """Check the current duty cycle and adjust switch states accordingly."""
-        current_duty_cycle = calc_duty_cycle()
+        current_duty_cycle = calc_duty_cycle(self.history)
 
         # Compare and adjust each heater switch
         if current_duty_cycle > self.duty_cycle_percentage:
