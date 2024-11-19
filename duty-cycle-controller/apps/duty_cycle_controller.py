@@ -1,5 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 import re
 import utils
 
@@ -57,9 +58,6 @@ class DutyCycleController(hass.Hass):
         for e in self.heater_switch:
             assert e.exists()
 
-        # Track on/off history
-        self.history = []
-
         # Schedule the duty cycle check loop
         self.run_every(
             self.duty_cycle_check,
@@ -75,24 +73,7 @@ class DutyCycleController(hass.Hass):
             elif state == "off":
                 switch.turn_off()
 
-            # Record state change
-            self.record_state(switch, state)
-
-    def record_state(self, switch, state):
-        """Record the current state of a switch with a timestamp."""
-        now = datetime.now()
-        self.history.append(
-            {
-                "timestamp": now,
-                "state": state,
-                "duration": self.adjustment_interval if state == "on" else timedelta(0),
-                "switch": switch,
-            }
-        )
-
-        # Limit the history size to manage memory usage
-        if len(self.history) > 1000:  # Adjust the size limit as needed
-            self.history.pop(0)
+        self.log(f"Setting {switch} to {state}")
 
     def turn_on_heat(self):
         for switch in self.heater_switch:
@@ -102,9 +83,20 @@ class DutyCycleController(hass.Hass):
         for switch in self.heater_switch:
             self.set_heater_state(switch, "off")
 
+    def calc_duty_cycle(self):
+        start_time = datetime.now() - self.history_duration
+        for switch in self.heater_switch:
+            history = self.get_history(
+                entity_id=switch.entity_id, start_time=start_time
+            )
+            self.log(f"(History for {switch} = {history}")
+            return utils.calculate_duty_cycle_from_history(
+                history[0], end_time=datetime.now(tz=ZoneInfo("Europe/Copenhagen"))
+            )
+
     def duty_cycle_check(self, kwargs):
         """Check the current duty cycle and adjust switch states accordingly."""
-        current_duty_cycle = calc_duty_cycle(self.history)
+        current_duty_cycle = self.calc_duty_cycle()
 
         # Compare and adjust each heater switch
         if current_duty_cycle > self.duty_cycle_percentage:

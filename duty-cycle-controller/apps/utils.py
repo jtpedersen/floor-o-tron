@@ -38,7 +38,15 @@ def calculate_duty_cycle_from_history(history, end_time):
     if not history:
         return 0
 
+    if isinstance(end_time, str):
+        end_time = parse_iso_to_datetime(end_time)
+
+    assert isinstance(end_time, datetime)
+    assert end_time.tzinfo
+
     cur_state, cur_time = split(history[0])
+    assert cur_time.tzinfo
+
     total_time_on = timedelta(0)
     total_time = timedelta(0)
 
@@ -47,14 +55,16 @@ def calculate_duty_cycle_from_history(history, end_time):
         total_time += delta
         if state == "on":
             total_time_on += delta
+        print(f"add_interval {state} {delta}")
 
     for e in history[1:]:
+        print(e)
         next_state, next_time = split(e)
         delta = next_time - cur_time
         add_interval(cur_state, delta)
         cur_state, cur_time = next_state, next_time
 
-    delta = parse_iso_to_datetime(end_time) - cur_time
+    delta = end_time - cur_time
     add_interval(cur_state, delta)
 
     duty_cycle = total_time_on / total_time

@@ -34,7 +34,7 @@ def show_history(history, interval=1):
 class TestDutyCycleCalculation(unittest.TestCase):
     def setUp(self):
         # Set up a fixed "now" for consistent testing
-        self.now = datetime(2023, 10, 1, 12, 0, 0)
+        self.now = datetime.fromisoformat("2024-11-19T11:29:43.860717+00:00")
         self.duration = timedelta(hours=1)  # 1-hour duration for analysis
 
     def TS(self, offset=0):
@@ -101,6 +101,51 @@ class TestDutyCycleCalculation(unittest.TestCase):
         ]
         result = calculate_duty_cycle_from_history(history, self.TS())
         self.assertAlmostEqual(result, 1.0, places=2)
+
+    def test_with_real_data(self):
+        """got some data"""
+        history = [
+            {
+                "entity_id": "input_boolean.fakeheater",
+                "state": "on",
+                "attributes": {"icon": "mdi:radiator", "friendly_name": "FakeHeater"},
+                "last_changed": "2024-11-19T10:57:25+00:00",
+                "last_updated": "2024-11-19T10:57:25+00:00",
+            },
+            {
+                "entity_id": "input_boolean.fakeheater",
+                "state": "on",
+                "attributes": {"icon": "mdi:radiator", "friendly_name": "FakeHeater"},
+                "last_changed": "2024-11-19T11:05:05.449374+00:00",
+                "last_updated": "2024-11-19T11:05:05.449374+00:00",
+            },
+            {
+                "entity_id": "input_boolean.fakeheater",
+                "state": "on",
+                "attributes": {"icon": "mdi:radiator", "friendly_name": "FakeHeater"},
+                "last_changed": "2024-11-19T11:14:25.893997+00:00",
+                "last_updated": "2024-11-19T11:14:25.893997+00:00",
+            },
+            {
+                "entity_id": "input_boolean.fakeheater",
+                "state": "on",
+                "attributes": {"icon": "mdi:radiator", "friendly_name": "FakeHeater"},
+                "last_changed": "2024-11-19T11:17:08.632652+00:00",
+                "last_updated": "2024-11-19T11:17:08.632652+00:00",
+            },
+            {
+                "entity_id": "input_boolean.fakeheater",
+                "state": "on",
+                "attributes": {"icon": "mdi:radiator", "friendly_name": "FakeHeater"},
+                "last_changed": "2024-11-19T11:28:43.860717+00:00",
+                "last_updated": "2024-11-19T11:28:43.860717+00:00",
+            },
+        ]
+
+        result = calculate_duty_cycle_from_history(
+            history, datetime.fromisoformat("2024-11-19T11:29:43.860717+00:00")
+        )
+        self.assertAlmostEqual(result, 1.0)
 
 
 if __name__ == "__main__":
