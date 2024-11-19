@@ -1,3 +1,7 @@
+## [0.0.12] - Being able to change is essential
+### Changes
+- Being able to change is essential
+
 ## [0.0.11] - Lets try it out
 ### Changes
 - Lets try it out
