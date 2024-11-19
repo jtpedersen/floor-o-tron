@@ -1,3 +1,7 @@
+## [0.0.11] - Lets try it out
+### Changes
+- Lets try it out
+
 ## [0.0.10] - better local setup
 ### Changes
 - better local setup

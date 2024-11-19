@@ -1,6 +1,6 @@
 {
   "name": "Duty Cycle Controller",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "slug": "duty_cycle_controller",
   "description": "Manage underfloor heating using duty cycle logic.",
   "url": "https://github.com/jtpedersen/floor-o-tron/tree/main/duty-cycle-controller",
@@ -45,6 +45,6 @@
     "debug": "bool"
   },
   "build_from": {
-    "amd64": "local/duty-cycle-controller:0.0.10"
+    "amd64": "local/duty-cycle-controller:0.0.11"
   }
 }
