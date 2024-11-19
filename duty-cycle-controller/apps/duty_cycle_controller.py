@@ -1,41 +1,6 @@
 import appdaemon.plugins.hass.hassapi as hass
 from datetime import datetime, timedelta
-import re
 import utils
-
-
-def parse_time_literal(time_str):
-    """Parses a time string like '1H', '1_hour', '15 minutes' into a timedelta object."""
-    time_units = {
-        "s": "seconds",
-        "sec": "seconds",
-        "second": "seconds",
-        "seconds": "seconds",
-        "m": "minutes",
-        "min": "minutes",
-        "minute": "minutes",
-        "minutes": "minutes",
-        "h": "hours",
-        "hour": "hours",
-        "hours": "hours",
-        "d": "days",
-        "day": "days",
-        "days": "days",
-    }
-
-    # Regex to match various time formats like '1H', '1_hour', '15 minutes'
-    match = re.match(r"(\d+)\s*([a-zA-Z_]+)", time_str)
-    if not match:
-        raise ValueError(f"Invalid time format: {time_str}")
-
-    value, unit = match.groups()
-    unit = unit.lower().replace("_", "")
-
-    if unit not in time_units:
-        raise ValueError(f"Unsupported time unit: {unit}")
-
-    # Create a timedelta object with the appropriate keyword argument
-    return timedelta(**{time_units[unit]: int(value)})
 
 
 class DutyCycleController(hass.Hass):
@@ -44,14 +9,16 @@ class DutyCycleController(hass.Hass):
         heater_switch = self.args.get("heater_switch")
         if not isinstance(heater_switch, list):
             heater_switch = [heater_switch]
-        self.duty_cycle_percentage = 0.5
-        self.min_pulse_width = parse_time_literal(
+        self.duty_cycle_percentage = (
+            float(self.args.get("duty_cycle_percentage")) / 100.0
+        )
+        self.min_pulse_width = utils.parse_time_literal(
             self.args.get("min_pulse_width", "15 minutes")
         )
-        self.history_duration = parse_time_literal(
+        self.history_duration = utils.parse_time_literal(
             self.args.get("history_duration", "1 hour")
         )
-        self.adjustment_interval = parse_time_literal(
+        self.adjustment_interval = utils.parse_time_literal(
             self.args.get("adjustment_interval", "30 seconds")
         )
 
@@ -91,7 +58,9 @@ class DutyCycleController(hass.Hass):
             history = self.get_history(
                 entity_id=switch.entity_id, start_time=start_time
             )
-            self.log(f"(History for {switch} since({start_time}) = {history}")
+            self.log(
+                f"(History for {switch} since({start_time}) = {history}", level="DEBUG"
+            )
             return utils.calculate_duty_cycle_from_history(
                 history[0], self.history_duration, end_time
             )
@@ -102,12 +71,12 @@ class DutyCycleController(hass.Hass):
 
         # Compare and adjust each heater switch
         if current_duty_cycle > self.duty_cycle_percentage:
+            self.log(
+                f"Duty cycle exceeded: {current_duty_cycle:.2%} > < {self.duty_cycle_percentage}."
+            )
             self.turn_off_heat()
-            self.log(
-                f"Duty cycle exceeded: {current_duty_cycle:.2%}. Turning off heat."
-            )
         else:
-            self.turn_on_heat()
             self.log(
-                f"Duty cycle below target: {current_duty_cycle:.2%}. Turning on heat."
+                f"Duty cycle below target: {current_duty_cycle:.2%} < {self.duty_cycle_percentage}."
             )
+            self.turn_on_heat()

@@ -3,14 +3,9 @@
 duty_cycle_controller:
   module: duty_cycle_controller
   class: DutyCycleController
-  log_level: DEBUG
-  # your actual switch entity ID or list of IDs
-  heater_switch: "input_boolean.fakeheater"
-  # Set the initial duty cycle percentage
-  duty_cycle_percentage: 50
-  # Minimum on/off time
-  min_pulse_width: "30 minutes"
-  # The duration for duty cycle analysis
-  history_duration: "6 hours"
-  # The time between duty cycle checks
-  adjustment_interval: "15 minutes"
+  log_level: !env_var log_level
+  heater_switch: !env_var heater_switch
+  duty_cycle_percentage: !env_var duty_cycle_percentage
+  min_pulse_width: !env_var min_pulse_width
+  history_duration: !env_var history_duration
+  adjustment_interval: !env_var adjustment_interval

@@ -1,4 +1,42 @@
 from datetime import datetime, timedelta, timezone
+import re
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+def parse_time_literal(time_str):
+    """Parses a time string like '1H', '1_hour', '15 minutes' into a timedelta object."""
+    time_units = {
+        "s": "seconds",
+        "sec": "seconds",
+        "second": "seconds",
+        "seconds": "seconds",
+        "m": "minutes",
+        "min": "minutes",
+        "minute": "minutes",
+        "minutes": "minutes",
+        "h": "hours",
+        "hour": "hours",
+        "hours": "hours",
+        "d": "days",
+        "day": "days",
+        "days": "days",
+    }
+
+    # Regex to match various time formats like '1H', '1_hour', '15 minutes'
+    match = re.match(r"(\d+)\s*([a-zA-Z_]+)", time_str)
+    if not match:
+        raise ValueError(f"Invalid time format: {time_str}")
+
+    value, unit = match.groups()
+    unit = unit.lower().replace("_", "")
+
+    if unit not in time_units:
+        raise ValueError(f"Unsupported time unit: {unit}")
+
+    # Create a timedelta object with the appropriate keyword argument
+    return timedelta(**{time_units[unit]: int(value)})
 
 
 def split(entry):
@@ -64,9 +102,11 @@ def calculate_duty_cycle_from_history(history, duration, end_time=datetime.now()
         last_valid_entry["last_changed"] = start_time.isoformat()
         modified_history.insert(0, last_valid_entry)
 
-    print(f"Why duration={duration}  and end_time={end_time}, start_time={start_time}")
+    logger.debug(
+        f"Why duration={duration}  and end_time={end_time}, start_time={start_time}"
+    )
     for e in history:
-        print(str(e))
+        logger.debug(str(e))
 
     history = modified_history
     cur_state, cur_time = split(history[0])
@@ -80,10 +120,10 @@ def calculate_duty_cycle_from_history(history, duration, end_time=datetime.now()
         total_time += delta
         if state == "on":
             total_time_on += delta
-        print(f"add_interval {state} {delta}")
+            logger.debug(f"add_interval {state} {delta}")
 
     for e in history[1:]:
-        print(e)
+        logger.debug(e)
         next_state, next_time = split(e)
         delta = next_time - cur_time
         add_interval(cur_state, delta)

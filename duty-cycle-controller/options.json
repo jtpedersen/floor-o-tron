@@ -1,4 +1,10 @@
 {
-  "debug": true,
-  "ha_url": "http://192.168.1.215:8123"
+    "debug": false,
+    "log_level": "INFO",
+    "ha_url": "http://192.168.1.215:8123",
+    "heater_switch": "input_boolean.fakeheater",
+    "duty_cycle_percentage": 53,
+    "min_pulse_width": "3 s",
+    "history_duration": "10 s",
+    "adjustment_interval": "2 s"
 }

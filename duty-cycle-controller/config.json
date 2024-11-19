@@ -32,7 +32,8 @@
     "min_pulse_width": "15 minutes",
     "history_duration": "1 hour",
     "adjustment_interval": "7 minutes",
-    "debug": false
+    "debug": false,
+    "log_level": "INFO"
   },
   "schema": {
     "ha_token": "str",
@@ -42,7 +43,8 @@
     "min_pulse_width": "str",
     "history_duration": "str",
     "adjustment_interval": "str",
-    "debug": "bool"
+    "debug": "bool",
+    "log_level": "str"
   },
   "build_from": {
     "amd64": "local/duty-cycle-controller:0.0.11"
