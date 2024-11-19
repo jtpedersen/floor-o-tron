@@ -1,6 +1,5 @@
 import appdaemon.plugins.hass.hassapi as hass
 from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
 import re
 import utils
 
@@ -49,7 +48,9 @@ class DutyCycleController(hass.Hass):
         self.min_pulse_width = parse_time_literal(
             self.args.get("min_pulse_width", "15 minutes")
         )
-        self.history_duration = parse_time_literal(self.args.get("duration", "1 hour"))
+        self.history_duration = parse_time_literal(
+            self.args.get("history_duration", "1 hour")
+        )
         self.adjustment_interval = parse_time_literal(
             self.args.get("adjustment_interval", "30 seconds")
         )
@@ -84,14 +85,15 @@ class DutyCycleController(hass.Hass):
             self.set_heater_state(switch, "off")
 
     def calc_duty_cycle(self):
-        start_time = datetime.now() - self.history_duration
+        end_time = datetime.now()
+        start_time = end_time - self.history_duration
         for switch in self.heater_switch:
             history = self.get_history(
                 entity_id=switch.entity_id, start_time=start_time
             )
-            self.log(f"(History for {switch} = {history}")
+            self.log(f"(History for {switch} since({start_time}) = {history}")
             return utils.calculate_duty_cycle_from_history(
-                history[0], end_time=datetime.now(tz=ZoneInfo("Europe/Copenhagen"))
+                history[0], self.history_duration, end_time
             )
 
     def duty_cycle_check(self, kwargs):

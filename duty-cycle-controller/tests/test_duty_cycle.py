@@ -67,7 +67,7 @@ class TestDutyCycleCalculation(unittest.TestCase):
             },
             {"state": "on", "last_changed": self.TS(timedelta(0))},
         ]
-        result = calculate_duty_cycle_from_history(history, self.TS())
+        result = calculate_duty_cycle_from_history(history, self.duration, self.TS())
         self.assertAlmostEqual(result, 1.0, places=2)
 
     def test_half_on_half_off(self):
@@ -87,7 +87,9 @@ class TestDutyCycleCalculation(unittest.TestCase):
             },
             {"state": "off", "last_changed": self.TS(timedelta(0))},
         ]
-        result = calculate_duty_cycle_from_history(history, self.TS())
+        result = calculate_duty_cycle_from_history(
+            history, self.duration, end_time=self.TS()
+        )
         self.assertAlmostEqual(result, 0.75, places=2)
 
     def test_partial_on_period(self):
@@ -99,7 +101,7 @@ class TestDutyCycleCalculation(unittest.TestCase):
             },
             {"state": "off", "last_changed": self.TS(timedelta(0))},
         ]
-        result = calculate_duty_cycle_from_history(history, self.TS())
+        result = calculate_duty_cycle_from_history(history, self.duration, self.TS())
         self.assertAlmostEqual(result, 1.0, places=2)
 
     def test_with_real_data(self):
@@ -143,7 +145,9 @@ class TestDutyCycleCalculation(unittest.TestCase):
         ]
 
         result = calculate_duty_cycle_from_history(
-            history, datetime.fromisoformat("2024-11-19T11:29:43.860717+00:00")
+            history,
+            self.duration,
+            datetime.fromisoformat("2024-11-19T11:29:43.860717+00:00"),
         )
         self.assertAlmostEqual(result, 1.0)
 

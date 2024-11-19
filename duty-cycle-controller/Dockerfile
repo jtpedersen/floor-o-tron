@@ -11,7 +11,6 @@ COPY run.py /run.py
 
 RUN chmod -R 755 /conf
 RUN mkdir -p /data
-
 ENTRYPOINT []
 
 CMD ["python", "/run.py"]

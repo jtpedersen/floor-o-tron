@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 def split(entry):
@@ -28,7 +28,7 @@ def get_state(history, timestamp):
     return history[-1]["state"]
 
 
-def calculate_duty_cycle_from_history(history, end_time):
+def calculate_duty_cycle_from_history(history, duration, end_time=datetime.now()):
     """
     Calculates the duty cycle from a history list containing state change timestamps.
 
@@ -42,8 +42,33 @@ def calculate_duty_cycle_from_history(history, end_time):
         end_time = parse_iso_to_datetime(end_time)
 
     assert isinstance(end_time, datetime)
-    assert end_time.tzinfo
+    if not end_time.tzinfo:
+        end_time = end_time.replace(tzinfo=timezone.utc)
 
+    modified_history = []
+    last_valid_entry = None
+    start_time = end_time - duration
+
+    for entry in history:
+        state, time = split(entry)
+        if time <= start_time:
+            last_valid_entry = (
+                entry  # Keep track of the last valid entry before start_time
+            )
+        elif start_time < time <= end_time:
+            modified_history.append(entry)
+
+    if last_valid_entry:
+        # Modify the last valid entry to have last_changed as start_time
+        last_valid_entry = last_valid_entry.copy()
+        last_valid_entry["last_changed"] = start_time.isoformat()
+        modified_history.insert(0, last_valid_entry)
+
+    print(f"Why duration={duration}  and end_time={end_time}, start_time={start_time}")
+    for e in history:
+        print(str(e))
+
+    history = modified_history
     cur_state, cur_time = split(history[0])
     assert cur_time.tzinfo
 
